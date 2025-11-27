@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="نظام إدارة موارد المؤسسة المتكامل - BGH ERP System">
+    <meta name="keywords" content="ERP, محاسبة, مبيعات, مشتريات, مخزون, موارد بشرية">
+    <meta name="author" content="BGH Systems">
+    <title>{% block title %}BGH ERP - نظام حسابات متكامل{% endblock %}</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block extra_css %}{% endblock %}
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/img/favicon.png">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <h1>🚀 BGH ERP System</h1>
+            <p>نظام إدارة موارد المؤسسة المتكامل</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="erpSystem.loadDashboardData()">
+                🔄 تحديث
+            </button>
+            <button class="btn btn-success" onclick="showNotifications()">
+                🔔 الإشعارات
+            </button>
+            <button class="btn btn-warning" onclick="showUserMenu()">
+                👤 الحساب
+            </button>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="/" class="active">🏠 الرئيسية</a></li>
+            <li><a href="#" data-module="customers">👥 العملاء</a></li>
+            <li><a href="#" data-module="suppliers">📦 الموردين</a></li>
+            <li><a href="#" data-module="products">🏷️ المنتجات</a></li>
+            <li><a href="#" data-module="invoices">💰 الفواتير</a></li>
+            <li><a href="#" data-module="sales">🛒 المبيعات</a></li>
+            <li><a href="#" data-module="purchases">📥 المشتريات</a></li>
+            <li><a href="#" data-module="inventory">📊 المخزون</a></li>
+            <li><a href="#" data-module="hr">👔 الموارد البشرية</a></li>
+            <li><a href="/admin">⚙️ الإدارة</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <main class="main-content">
+            {% block content %}
+            <!-- Dashboard -->
+            <div class="dashboard">
+                <h2>لوحة المعلومات الرئيسية</h2>
+                
+                <!-- Stats -->
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="icon">👥</div>
+                        <div class="number" id="total-customers">0</div>
+                        <div class="label">العملاء</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">🏷️</div>
+                        <div class="number" id="total-products">0</div>
+                        <div class="label">المنتجات</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">💰</div>
+                        <div class="number" id="total-invoices">0</div>
+                        <div class="label">الفواتير</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📊</div>
+                        <div class="number" id="total-orders">0</div>
+                        <div class="label">الطلبات</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>النشاط الأخير</h3>
+                    </div>
+                    <div id="recent-activity">
+                        <p>جاري تحميل البيانات...</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>إجراءات سريعة</h3>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="createNew('customer')">
+                            ➕ عميل جديد
+                        </button>
+                        <button class="btn btn-primary" onclick="createNew('product')">
+                            ➕ منتج جديد
+                        </button>
+                        <button class="btn btn-success" onclick="createNew('invoice')">
+                            ➕ فاتورة جديدة
+                        </button>
+                        <button class="btn btn-success" onclick="createNew('order')">
+                            ➕ طلب جديد
+                        </button>
+                        <button class="btn btn-warning" onclick="generateReport()">
+                            📊 تقرير
+                        </button>
+                        <button class="btn btn-danger" onclick="exportData()">
+                            📥 تصدير البيانات
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module Content Container -->
+            <div id="module-content"></div>
+            {% endblock %}
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 20px; color: white; margin-top: 30px;">
+        <p>© 2025 BGH ERP System | نظام حسابات متكامل | جميع الحقوق محفوظة</p>
+        <p style="margin-top: 10px;">
+            <a href="https://github.com/BGHUSSEINSASH/bghusseinsashodoo" target="_blank" style="color: white; text-decoration: none;">
+                📦 GitHub
+            </a> | 
+            <a href="https://bghusseinsash07.web.app" target="_blank" style="color: white; text-decoration: none;">
+                🔥 Firebase
+            </a>
+        </p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/static/js/app.js"></script>
+    {% block extra_js %}{% endblock %}
+
+    <script>
+        // Helper functions
+        function showNotifications() {
+            alert('🔔 لا توجد إشعارات جديدة');
+        }
+
+        function showUserMenu() {
+            const menu = confirm('هل تريد تسجيل الخروج؟');
+            if (menu) {
+                window.location.href = '/admin/logout/';
+            }
+        }
+
+        function createNew(type) {
+            erpSystem.showNotification(`جاري فتح نموذج إضافة ${type} جديد...`, 'info');
+            // Implement create form logic
+        }
+
+        function generateReport() {
+            erpSystem.showNotification('جاري إنشاء التقرير...', 'info');
+            // Implement report generation
+        }
+
+        function exportData() {
+            const format = prompt('اختر صيغة التصدير: json أو csv', 'json');
+            if (format === 'json' || format === 'csv') {
+                erpSystem.showNotification(`جاري تصدير البيانات بصيغة ${format.toUpperCase()}...`, 'info');
+                // Implement export logic
+            }
+        }
+    </script>
+</body>
+</html>

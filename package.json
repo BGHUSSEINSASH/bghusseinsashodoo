@@ -1,0 +1,37 @@
+{
+  "name": "bgh-erp-system",
+  "version": "1.0.0",
+  "description": "نظام إدارة موارد المؤسسة المتكامل - BGH ERP System",
+  "main": "static/js/app.js",
+  "scripts": {
+    "dev": "python manage.py runserver",
+    "build": "python manage.py collectstatic --noinput",
+    "migrate": "python manage.py migrate",
+    "test": "python manage.py test",
+    "deploy": "firebase deploy"
+  },
+  "keywords": [
+    "ERP",
+    "Django",
+    "REST API",
+    "Accounting",
+    "Sales",
+    "Inventory",
+    "HR"
+  ],
+  "author": "BGH Systems",
+  "license": "MIT",
+  "dependencies": {
+    "django": "^4.2.26",
+    "djangorestframework": "^3.16.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BGHUSSEINSASH/bghusseinsashodoo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BGHUSSEINSASH/bghusseinsashodoo/issues"
+  },
+  "homepage": "https://bghusseinsash07.web.app"
+}

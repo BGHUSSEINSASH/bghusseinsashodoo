@@ -168,3 +168,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Database configuration for production
 if os.environ.get('DATABASE_URL'):
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
+# Webhooks Configuration
+WEBHOOKS_ENABLED = os.environ.get('WEBHOOKS_ENABLED', 'True') == 'True'
+WEBHOOK_ENDPOINTS = {
+    'customer.created': os.environ.get('WEBHOOK_CUSTOMER_CREATED'),
+    'invoice.created': os.environ.get('WEBHOOK_INVOICE_CREATED'),
+    'invoice.paid': os.environ.get('WEBHOOK_INVOICE_PAID'),
+    'order.created': os.environ.get('WEBHOOK_ORDER_CREATED'),
+    'order.delivered': os.environ.get('WEBHOOK_ORDER_DELIVERED'),
+    'stock.low': os.environ.get('WEBHOOK_STOCK_LOW'),
+}
+
+# External API Integration Settings
+SHOPIFY_API_URL = os.environ.get('SHOPIFY_API_URL')
+SHOPIFY_API_TOKEN = os.environ.get('SHOPIFY_API_TOKEN')
+PAYPAL_API_URL = os.environ.get('PAYPAL_API_URL')
+PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID')
+PAYPAL_SECRET = os.environ.get('PAYPAL_SECRET')
+SLACK_WEBHOOK_URL = os.environ.get('SLACK_WEBHOOK_URL')
+DISCORD_WEBHOOK_URL = os.environ.get('DISCORD_WEBHOOK_URL')

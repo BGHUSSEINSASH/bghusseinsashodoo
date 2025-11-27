@@ -1,0 +1,277 @@
+{
+  "system": {
+    "name": "BGH ERP System",
+    "version": "1.0.0",
+    "description": "نظام إدارة موارد المؤسسة المتكامل",
+    "modules_count": 26,
+    "technologies": [
+      "Python",
+      "Django",
+      "Django REST Framework",
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "XML",
+      "JSON"
+    ]
+  },
+  "api": {
+    "base_url": "/api",
+    "version": "v1",
+    "format": "JSON",
+    "authentication": [
+      "Token",
+      "Session"
+    ]
+  },
+  "modules": {
+    "core": {
+      "name": "الأساسيات",
+      "endpoints": [
+        "/api/core/customers/",
+        "/api/core/suppliers/",
+        "/api/core/products/",
+        "/api/core/warehouses/",
+        "/api/core/employees/"
+      ],
+      "models": 5
+    },
+    "accounting": {
+      "name": "المحاسبة",
+      "endpoints": [
+        "/api/accounting/invoices/",
+        "/api/accounting/expenses/"
+      ],
+      "models": 2
+    },
+    "sales": {
+      "name": "المبيعات",
+      "endpoints": [
+        "/api/sales/orders/",
+        "/api/sales/quotes/"
+      ],
+      "models": 2
+    },
+    "purchases": {
+      "name": "المشتريات",
+      "endpoints": [
+        "/api/purchases/orders/"
+      ],
+      "models": 1
+    },
+    "inventory": {
+      "name": "المخزون",
+      "endpoints": [
+        "/api/inventory/moves/"
+      ],
+      "models": 1
+    },
+    "hr": {
+      "name": "الموارد البشرية",
+      "endpoints": [
+        "/api/hr/attendance/",
+        "/api/hr/payrolls/"
+      ],
+      "models": 2
+    },
+    "projects": {
+      "name": "إدارة المشاريع",
+      "endpoints": [
+        "/api/projects/projects/",
+        "/api/projects/tasks/"
+      ],
+      "models": 2
+    },
+    "marketing": {
+      "name": "التسويق",
+      "endpoints": [
+        "/api/marketing/campaigns/",
+        "/api/marketing/leads/"
+      ],
+      "models": 2
+    },
+    "website": {
+      "name": "الموقع الإلكتروني",
+      "endpoints": [
+        "/api/website/pages/"
+      ],
+      "models": 1
+    },
+    "pos": {
+      "name": "نقاط البيع",
+      "endpoints": [
+        "/api/pos/orders/"
+      ],
+      "models": 1
+    },
+    "manufacturing": {
+      "name": "التصنيع",
+      "endpoints": [
+        "/api/manufacturing/workorders/"
+      ],
+      "models": 1
+    },
+    "maintenance": {
+      "name": "الصيانة",
+      "endpoints": [
+        "/api/maintenance/requests/"
+      ],
+      "models": 1
+    },
+    "documents": {
+      "name": "المستندات",
+      "endpoints": [
+        "/api/documents/documents/"
+      ],
+      "models": 1
+    },
+    "subscriptions": {
+      "name": "الاشتراكات",
+      "endpoints": [
+        "/api/subscriptions/subscriptions/"
+      ],
+      "models": 1
+    },
+    "fleet": {
+      "name": "إدارة الأسطول",
+      "endpoints": [
+        "/api/fleet/vehicles/"
+      ],
+      "models": 1
+    },
+    "quality": {
+      "name": "الجودة",
+      "endpoints": [
+        "/api/quality/checks/"
+      ],
+      "models": 1
+    },
+    "helpdesk": {
+      "name": "الدعم الفني",
+      "endpoints": [
+        "/api/helpdesk/tickets/"
+      ],
+      "models": 1
+    },
+    "events": {
+      "name": "الأحداث",
+      "endpoints": [
+        "/api/events/events/"
+      ],
+      "models": 1
+    },
+    "elearning": {
+      "name": "التعليم",
+      "endpoints": [
+        "/api/elearning/courses/"
+      ],
+      "models": 1
+    },
+    "recruitment": {
+      "name": "التوظيف",
+      "endpoints": [
+        "/api/recruitment/postings/"
+      ],
+      "models": 1
+    },
+    "sign": {
+      "name": "التوقيعات الإلكترونية",
+      "endpoints": [
+        "/api/sign/requests/"
+      ],
+      "models": 1
+    },
+    "email_marketing": {
+      "name": "التسويق البريدي",
+      "endpoints": [
+        "/api/email/campaigns/"
+      ],
+      "models": 1
+    },
+    "surveys": {
+      "name": "الاستطلاعات",
+      "endpoints": [
+        "/api/surveys/surveys/"
+      ],
+      "models": 1
+    },
+    "appointments": {
+      "name": "المواعيد",
+      "endpoints": [
+        "/api/appointments/appointments/"
+      ],
+      "models": 1
+    },
+    "expenses": {
+      "name": "النفقات",
+      "endpoints": [
+        "/api/expenses/reports/"
+      ],
+      "models": 1
+    },
+    "discuss": {
+      "name": "المراسلات",
+      "endpoints": [
+        "/api/discuss/messages/"
+      ],
+      "models": 1
+    }
+  },
+  "integrations": {
+    "webhooks": {
+      "enabled": true,
+      "events": [
+        "customer.created",
+        "invoice.created",
+        "invoice.paid",
+        "order.created",
+        "order.delivered",
+        "stock.low"
+      ]
+    },
+    "external_apis": {
+      "shopify": {
+        "enabled": false,
+        "description": "مزامنة المنتجات مع Shopify"
+      },
+      "paypal": {
+        "enabled": false,
+        "description": "معالجة المدفوعات عبر PayPal"
+      },
+      "slack": {
+        "enabled": false,
+        "description": "إرسال الإشعارات عبر Slack"
+      },
+      "discord": {
+        "enabled": false,
+        "description": "إرسال الإشعارات عبر Discord"
+      }
+    },
+    "graphql": {
+      "enabled": false,
+      "endpoint": "/graphql/",
+      "description": "GraphQL API endpoint (optional)"
+    }
+  },
+  "deployment": {
+    "firebase": {
+      "project_id": "bghusseinsash07",
+      "hosting_url": "https://bghusseinsash07.web.app"
+    },
+    "github": {
+      "repository": "https://github.com/BGHUSSEINSASH/bghusseinsashodoo"
+    }
+  },
+  "statistics": {
+    "total_files": 280,
+    "total_lines": 3000,
+    "total_models": 40,
+    "total_endpoints": 50,
+    "languages": {
+      "Python": "70%",
+      "JavaScript": "15%",
+      "HTML/CSS": "10%",
+      "XML/JSON": "5%"
+    }
+  }
+}

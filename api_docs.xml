@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api_documentation>
+    <system>
+        <name>BGH ERP System</name>
+        <version>1.0.0</version>
+        <description>نظام إدارة موارد المؤسسة المتكامل</description>
+        <base_url>/api</base_url>
+    </system>
+
+    <!-- Core Module -->
+    <module name="core" description="النماذج الأساسية">
+        <endpoint>
+            <name>customers</name>
+            <path>/api/core/customers/</path>
+            <methods>
+                <method type="GET">عرض جميع العملاء</method>
+                <method type="POST">إضافة عميل جديد</method>
+            </methods>
+            <fields>
+                <field name="name" type="string" required="true">اسم العميل</field>
+                <field name="email" type="email" required="true">البريد الإلكتروني</field>
+                <field name="phone" type="string" required="false">رقم الهاتف</field>
+                <field name="address" type="text" required="false">العنوان</field>
+            </fields>
+        </endpoint>
+
+        <endpoint>
+            <name>suppliers</name>
+            <path>/api/core/suppliers/</path>
+            <methods>
+                <method type="GET">عرض جميع الموردين</method>
+                <method type="POST">إضافة مورد جديد</method>
+            </methods>
+            <fields>
+                <field name="name" type="string" required="true">اسم المورد</field>
+                <field name="email" type="email" required="true">البريد الإلكتروني</field>
+                <field name="phone" type="string" required="false">رقم الهاتف</field>
+                <field name="address" type="text" required="false">العنوان</field>
+            </fields>
+        </endpoint>
+
+        <endpoint>
+            <name>products</name>
+            <path>/api/core/products/</path>
+            <methods>
+                <method type="GET">عرض جميع المنتجات</method>
+                <method type="POST">إضافة منتج جديد</method>
+            </methods>
+            <fields>
+                <field name="name" type="string" required="true">اسم المنتج</field>
+                <field name="price" type="decimal" required="true">السعر</field>
+                <field name="warehouse" type="foreign_key" required="true">المستودع</field>
+                <field name="description" type="text" required="false">الوصف</field>
+            </fields>
+        </endpoint>
+
+        <endpoint>
+            <name>warehouses</name>
+            <path>/api/core/warehouses/</path>
+            <methods>
+                <method type="GET">عرض جميع المستودعات</method>
+                <method type="POST">إضافة مستودع جديد</method>
+            </methods>
+            <fields>
+                <field name="name" type="string" required="true">اسم المستودع</field>
+                <field name="location" type="string" required="false">الموقع</field>
+            </fields>
+        </endpoint>
+
+        <endpoint>
+            <name>employees</name>
+            <path>/api/core/employees/</path>
+            <methods>
+                <method type="GET">عرض جميع الموظفين</method>
+                <method type="POST">إضافة موظف جديد</method>
+            </methods>
+            <fields>
+                <field name="name" type="string" required="true">اسم الموظف</field>
+                <field name="position" type="string" required="true">الوظيفة</field>
+                <field name="email" type="email" required="true">البريد الإلكتروني</field>
+                <field name="phone" type="string" required="false">رقم الهاتف</field>
+            </fields>
+        </endpoint>
+    </module>
+
+    <!-- Accounting Module -->
+    <module name="accounting" description="المحاسبة">
+        <endpoint>
+            <name>invoices</name>
+            <path>/api/accounting/invoices/</path>
+            <methods>
+                <method type="GET">عرض جميع الفواتير</method>
+                <method type="POST">إنشاء فاتورة جديدة</method>
+            </methods>
+            <fields>
+                <field name="customer" type="foreign_key" required="true">العميل</field>
+                <field name="total" type="decimal" required="true">المبلغ الإجمالي</field>
+                <field name="status" type="choice" required="true">الحالة (draft/posted/paid/cancelled)</field>
+                <field name="date" type="date" required="true">التاريخ</field>
+            </fields>
+        </endpoint>
+
+        <endpoint>
+            <name>expenses</name>
+            <path>/api/accounting/expenses/</path>
+            <methods>
+                <method type="GET">عرض جميع المصروفات</method>
+                <method type="POST">تسجيل مصروف جديد</method>
+            </methods>
+            <fields>
+                <field name="description" type="text" required="true">الوصف</field>
+                <field name="amount" type="decimal" required="true">المبلغ</field>
+                <field name="date" type="date" required="true">التاريخ</field>
+                <field name="category" type="string" required="false">الفئة</field>
+            </fields>
+        </endpoint>
+    </module>
+
+    <!-- Sales Module -->
+    <module name="sales" description="المبيعات">
+        <endpoint>
+            <name>orders</name>
+            <path>/api/sales/orders/</path>
+            <methods>
+                <method type="GET">عرض جميع طلبات البيع</method>
+                <method type="POST">إنشاء طلب بيع جديد</method>
+            </methods>
+            <fields>
+                <field name="customer" type="foreign_key" required="true">العميل</field>
+                <field name="product" type="foreign_key" required="true">المنتج</field>
+                <field name="quantity" type="integer" required="true">الكمية</field>
+                <field name="total" type="decimal" required="true">المبلغ الإجمالي</field>
+                <field name="status" type="choice" required="true">الحالة</field>
+            </fields>
+        </endpoint>
+
+        <endpoint>
+            <name>quotes</name>
+            <path>/api/sales/quotes/</path>
+            <methods>
+                <method type="GET">عرض جميع عروض الأسعار</method>
+                <method type="POST">إنشاء عرض سعر جديد</method>
+            </methods>
+        </endpoint>
+    </module>
+
+    <!-- Purchases Module -->
+    <module name="purchases" description="المشتريات">
+        <endpoint>
+            <name>orders</name>
+            <path>/api/purchases/orders/</path>
+            <methods>
+                <method type="GET">عرض جميع طلبات الشراء</method>
+                <method type="POST">إنشاء طلب شراء جديد</method>
+            </methods>
+            <fields>
+                <field name="supplier" type="foreign_key" required="true">المورد</field>
+                <field name="product" type="foreign_key" required="true">المنتج</field>
+                <field name="quantity" type="integer" required="true">الكمية</field>
+                <field name="total" type="decimal" required="true">المبلغ الإجمالي</field>
+            </fields>
+        </endpoint>
+    </module>
+
+    <!-- Inventory Module -->
+    <module name="inventory" description="المخزون">
+        <endpoint>
+            <name>moves</name>
+            <path>/api/inventory/moves/</path>
+            <methods>
+                <method type="GET">عرض جميع حركات المخزون</method>
+                <method type="POST">تسجيل حركة مخزون جديدة</method>
+            </methods>
+            <fields>
+                <field name="product" type="foreign_key" required="true">المنتج</field>
+                <field name="warehouse" type="foreign_key" required="true">المستودع</field>
+                <field name="quantity" type="integer" required="true">الكمية</field>
+                <field name="type" type="choice" required="true">النوع (in/out/transfer)</field>
+            </fields>
+        </endpoint>
+    </module>
+
+    <!-- HR Module -->
+    <module name="hr" description="الموارد البشرية">
+        <endpoint>
+            <name>attendance</name>
+            <path>/api/hr/attendance/</path>
+            <methods>
+                <method type="GET">عرض جميع سجلات الحضور</method>
+                <method type="POST">تسجيل حضور جديد</method>
+            </methods>
+        </endpoint>
+
+        <endpoint>
+            <name>payrolls</name>
+            <path>/api/hr/payrolls/</path>
+            <methods>
+                <method type="GET">عرض جميع الرواتب</method>
+                <method type="POST">إضافة راتب جديد</method>
+            </methods>
+        </endpoint>
+    </module>
+
+    <!-- Additional Modules -->
+    <module name="projects" description="إدارة المشاريع">
+        <endpoint>
+            <name>projects</name>
+            <path>/api/projects/projects/</path>
+        </endpoint>
+        <endpoint>
+            <name>tasks</name>
+            <path>/api/projects/tasks/</path>
+        </endpoint>
+    </module>
+
+    <module name="marketing" description="التسويق">
+        <endpoint>
+            <name>campaigns</name>
+            <path>/api/marketing/campaigns/</path>
+        </endpoint>
+        <endpoint>
+            <name>leads</name>
+            <path>/api/marketing/leads/</path>
+        </endpoint>
+    </module>
+
+    <!-- Webhooks Configuration -->
+    <webhooks>
+        <webhook>
+            <name>invoice_created</name>
+            <event>accounting.invoice.created</event>
+            <description>يتم تشغيله عند إنشاء فاتورة جديدة</description>
+        </webhook>
+        <webhook>
+            <name>order_completed</name>
+            <event>sales.order.completed</event>
+            <description>يتم تشغيله عند إتمام طلب بيع</description>
+        </webhook>
+        <webhook>
+            <name>stock_low</name>
+            <event>inventory.stock.low</event>
+            <description>يتم تشغيله عند انخفاض المخزون</description>
+        </webhook>
+    </webhooks>
+
+    <!-- Authentication -->
+    <authentication>
+        <method type="token">Token-based authentication</method>
+        <method type="session">Session-based authentication</method>
+        <header>Authorization: Bearer {token}</header>
+    </authentication>
+
+    <!-- Response Format -->
+    <response_format>
+        <success>
+            <code>200</code>
+            <format>JSON</format>
+            <structure>
+                <data>Array or Object</data>
+                <count>Total records</count>
+                <next>Next page URL</next>
+                <previous>Previous page URL</previous>
+            </structure>
+        </success>
+        <error>
+            <code>400/401/403/404/500</code>
+            <format>JSON</format>
+            <structure>
+                <error>Error message</error>
+                <detail>Detailed description</detail>
+            </structure>
+        </error>
+    </response_format>
+</api_documentation>
