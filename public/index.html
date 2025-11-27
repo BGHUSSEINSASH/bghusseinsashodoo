@@ -1,99 +1,778 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGH ERP - نظام حسابات متكامل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.6.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.6.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.6.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.6.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.6.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.6.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.6.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.6.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.6.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.6.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+            padding: 0 20px;
+        }
+
+        .nav-tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .module-section {
+            display: none;
+        }
+
+        .module-section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .module-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .module-header h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .module-header p {
+            opacity: 0.9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .card p {
+            color: #6c757d;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-box .label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .feature-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .feature-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border-right: 4px solid #667eea;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-box {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .info-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-tabs {
+                padding: 0 10px;
+            }
+            .nav-tab {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>🚀 BGH ERP System</h2>
-      <h1>نظام حسابات متكامل</h1>
-      <p>نظام إدارة موارد المؤسسة (ERP) شامل - تم نشره بنجاح على Firebase!</p>
-      <p style="color: #039be5; font-weight: bold;">26 قسم متكامل | REST API | Django & DRF</p>
-      <div style="margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 8px;">
-        <h3 style="margin: 0 0 10px 0; font-size: 16px;">الأقسام الرئيسية:</h3>
-        <p style="font-size: 13px; margin: 5px 0;">✅ المحاسبة | المبيعات | المشتريات | المخزون</p>
-        <p style="font-size: 13px; margin: 5px 0;">✅ الموارد البشرية | إدارة المشاريع | التسويق</p>
-        <p style="font-size: 13px; margin: 5px 0;">✅ نقاط البيع | التصنيع | الصيانة | المستندات</p>
-        <p style="font-size: 13px; margin: 5px 0;">✅ إدارة الأسطول | الجودة | الدعم الفني | الأحداث</p>
-        <p style="font-size: 13px; margin: 5px 0;">✅ التعليم | التوظيف | الاشتراكات | المواعيد</p>
-      </div>
-      <a target="_blank" href="https://github.com/BGHUSSEINSASH/bghusseinsashodoo" style="margin-bottom: 10px;">📦 GitHub Repository</a>
-      <a href="#" onclick="alert('النظام منشور بنجاح على Firebase!'); return false;">📚 الوثائق</a>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 BGH ERP System</h1>
+            <p>نظام إدارة موارد المؤسسة المتكامل - 26 قسم</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showModule('dashboard')">🏠 الرئيسية</button>
+            <button class="nav-tab" onclick="showModule('core')">📦 الأساسيات</button>
+            <button class="nav-tab" onclick="showModule('accounting')">💰 المحاسبة</button>
+            <button class="nav-tab" onclick="showModule('sales')">🛒 المبيعات</button>
+            <button class="nav-tab" onclick="showModule('purchases')">📥 المشتريات</button>
+            <button class="nav-tab" onclick="showModule('inventory')">📊 المخزون</button>
+            <button class="nav-tab" onclick="showModule('hr')">👥 الموارد البشرية</button>
+            <button class="nav-tab" onclick="showModule('projects')">📋 المشاريع</button>
+            <button class="nav-tab" onclick="showModule('marketing')">📢 التسويق</button>
+            <button class="nav-tab" onclick="showModule('more')">⚙️ المزيد</button>
+        </div>
+
+        <div class="content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="module-section active">
+                <div class="module-header">
+                    <h2>لوحة المعلومات الرئيسية</h2>
+                    <p>نظرة عامة على جميع الأقسام والإحصائيات</p>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="number">26</div>
+                        <div class="label">قسم متكامل</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">100+</div>
+                        <div class="label">نموذج بيانات</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">REST</div>
+                        <div class="label">API كامل</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">∞</div>
+                        <div class="label">قابل للتوسع</div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="card" onclick="showModule('core')">
+                        <div class="card-icon">📦</div>
+                        <h3>الأساسيات (Core)</h3>
+                        <p>العملاء، الموردين، المنتجات، المستودعات، الموظفين</p>
+                    </div>
+                    <div class="card" onclick="showModule('accounting')">
+                        <div class="card-icon">💰</div>
+                        <h3>المحاسبة</h3>
+                        <p>الفواتير، المصروفات، الضرائب، التقارير المالية</p>
+                    </div>
+                    <div class="card" onclick="showModule('sales')">
+                        <div class="card-icon">🛒</div>
+                        <h3>المبيعات</h3>
+                        <p>أوامر البيع، عروض الأسعار، إدارة العملاء</p>
+                    </div>
+                    <div class="card" onclick="showModule('purchases')">
+                        <div class="card-icon">📥</div>
+                        <h3>المشتريات</h3>
+                        <p>أوامر الشراء، الموردين، الفواتير الشرائية</p>
+                    </div>
+                    <div class="card" onclick="showModule('inventory')">
+                        <div class="card-icon">📊</div>
+                        <h3>المخزون</h3>
+                        <p>إدارة المنتجات، المستودعات، حركات المخزون</p>
+                    </div>
+                    <div class="card" onclick="showModule('hr')">
+                        <div class="card-icon">👥</div>
+                        <h3>الموارد البشرية</h3>
+                        <p>الموظفين، الرواتب، الحضور والانصراف</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>🌐 روابط مهمة</h4>
+                    <button class="action-btn" onclick="window.open('https://github.com/BGHUSSEINSASH/bghusseinsashodoo', '_blank')">📦 GitHub Repository</button>
+                    <button class="action-btn" onclick="window.open('https://console.firebase.google.com/project/bghusseinsash07', '_blank')">🔥 Firebase Console</button>
+                    <button class="action-btn" onclick="alert('النظام منشور بنجاح على Firebase!')">📚 الوثائق</button>
+                </div>
+            </div>
+
+            <!-- Core Section -->
+            <div id="core" class="module-section">
+                <div class="module-header">
+                    <h2>📦 الأساسيات (Core Module)</h2>
+                    <p>النماذج الأساسية المشتركة في النظام</p>
+                </div>
+
+                <div class="feature-list">
+                    <h3>المكونات الرئيسية:</h3>
+                    <ul>
+                        <li>إدارة العملاء (Customers) - معلومات العملاء الكاملة</li>
+                        <li>إدارة الموردين (Suppliers) - قاعدة بيانات الموردين</li>
+                        <li>إدارة المنتجات (Products) - كتالوج المنتجات</li>
+                        <li>إدارة المستودعات (Warehouses) - مواقع التخزين</li>
+                        <li>إدارة الموظفين (Employees) - بيانات الموظفين</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="info-box">
+                        <h4>العملاء</h4>
+                        <p>إدارة شاملة لبيانات العملاء مع التواصل والمتابعة</p>
+                        <span class="badge">API: /api/core/customers/</span>
+                    </div>
+                    <div class="info-box">
+                        <h4>الموردين</h4>
+                        <p>قاعدة بيانات الموردين مع تتبع الأداء</p>
+                        <span class="badge">API: /api/core/suppliers/</span>
+                    </div>
+                    <div class="info-box">
+                        <h4>المنتجات</h4>
+                        <p>كتالوج شامل للمنتجات مع الأسعار والمواصفات</p>
+                        <span class="badge">API: /api/core/products/</span>
+                    </div>
+                    <div class="info-box">
+                        <h4>المستودعات</h4>
+                        <p>إدارة مواقع التخزين والتوزيع</p>
+                        <span class="badge">API: /api/core/warehouses/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accounting Section -->
+            <div id="accounting" class="module-section">
+                <div class="module-header">
+                    <h2>💰 المحاسبة (Accounting)</h2>
+                    <p>نظام محاسبي متكامل للإدارة المالية</p>
+                </div>
+
+                <div class="feature-list">
+                    <h3>المميزات:</h3>
+                    <ul>
+                        <li>إدارة الفواتير (Invoices) - فواتير البيع والشراء</li>
+                        <li>تتبع المصروفات (Expenses) - جميع النفقات</li>
+                        <li>التقارير المالية - تقارير شاملة ومفصلة</li>
+                        <li>إدارة الضرائب - حساب وتسجيل الضرائب</li>
+                        <li>الميزانية - متابعة الميزانية والتوقعات</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="info-box">
+                        <h4>الفواتير</h4>
+                        <p>Draft | Posted | Paid | Cancelled</p>
+                        <span class="badge">API: /api/accounting/invoices/</span>
+                    </div>
+                    <div class="info-box">
+                        <h4>المصروفات</h4>
+                        <p>تسجيل ومتابعة جميع المصروفات</p>
+                        <span class="badge">API: /api/accounting/expenses/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Section -->
+            <div id="sales" class="module-section">
+                <div class="module-header">
+                    <h2>🛒 المبيعات (Sales)</h2>
+                    <p>إدارة دورة المبيعات الكاملة</p>
+                </div>
+
+                <div class="feature-list">
+                    <h3>المميزات:</h3>
+                    <ul>
+                        <li>أوامر البيع (Sales Orders) - تتبع الطلبات</li>
+                        <li>عروض الأسعار (Quotes) - إنشاء عروض احترافية</li>
+                        <li>إدارة العملاء - CRM مدمج</li>
+                        <li>التقارير - تحليل الأداء البيعي</li>
+                        <li>المتابعة - تنبيهات وتذكيرات</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="info-box">
+                        <h4>أوامر البيع</h4>
+                        <p>Draft | Confirmed | Delivered | Invoiced</p>
+                        <span class="badge">API: /api/sales/orders/</span>
+                    </div>
+                    <div class="info-box">
+                        <h4>عروض الأسعار</h4>
+                        <p>إنشاء وإدارة عروض الأسعار</p>
+                        <span class="badge">API: /api/sales/quotes/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Purchases Section -->
+            <div id="purchases" class="module-section">
+                <div class="module-header">
+                    <h2>📥 المشتريات (Purchases)</h2>
+                    <p>إدارة عمليات الشراء والموردين</p>
+                </div>
+
+                <div class="feature-list">
+                    <h3>المميزات:</h3>
+                    <ul>
+                        <li>أوامر الشراء (Purchase Orders) - طلبات الشراء</li>
+                        <li>إدارة الموردين - قاعدة بيانات الموردين</li>
+                        <li>الفواتير الشرائية - تسجيل الفواتير</li>
+                        <li>المقارنات - مقارنة أسعار الموردين</li>
+                        <li>التقييم - تقييم أداء الموردين</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="info-box">
+                        <h4>أوامر الشراء</h4>
+                        <p>Draft | Confirmed | Received | Billed</p>
+                        <span class="badge">API: /api/purchases/orders/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Section -->
+            <div id="inventory" class="module-section">
+                <div class="module-header">
+                    <h2>📊 المخزون (Inventory)</h2>
+                    <p>إدارة متقدمة للمخزون والمستودعات</p>
+                </div>
+
+                <div class="feature-list">
+                    <h3>المميزات:</h3>
+                    <ul>
+                        <li>حركات المخزون (Stock Moves) - تتبع الحركات</li>
+                        <li>الجرد - جرد دوري وآلي</li>
+                        <li>التحويلات - نقل بين المستودعات</li>
+                        <li>التنبيهات - تنبيهات الكميات</li>
+                        <li>التقارير - تقارير المخزون الشاملة</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="info-box">
+                        <h4>حركات المخزون</h4>
+                        <p>تتبع دقيق لكل حركة في المخزون</p>
+                        <span class="badge">API: /api/inventory/moves/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HR Section -->
+            <div id="hr" class="module-section">
+                <div class="module-header">
+                    <h2>👥 الموارد البشرية (HR)</h2>
+                    <p>إدارة شاملة للموارد البشرية</p>
+                </div>
+
+                <div class="feature-list">
+                    <h3>المميزات:</h3>
+                    <ul>
+                        <li>الحضور والانصراف (Attendance) - نظام بصمة</li>
+                        <li>الرواتب (Payroll) - حساب الرواتب آلياً</li>
+                        <li>الإجازات - إدارة الإجازات والطلبات</li>
+                        <li>التقييم - تقييم أداء الموظفين</li>
+                        <li>التوظيف - عملية التوظيف الكاملة</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="info-box">
+                        <h4>الحضور والانصراف</h4>
+                        <p>Present | Absent | Late</p>
+                        <span class="badge">API: /api/hr/attendance/</span>
+                    </div>
+                    <div class="info-box">
+                        <h4>الرواتب</h4>
+                        <p>حساب وإصدار الرواتب الشهرية</p>
+                        <span class="badge">API: /api/hr/payrolls/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div id="projects" class="module-section">
+                <div class="module-header">
+                    <h2>📋 إدارة المشاريع (Project Management)</h2>
+                    <p>تخطيط وتنفيذ المشاريع بكفاءة</p>
+                </div>
+
+                <div class="feature-list">
+                    <h3>المميزات:</h3>
+                    <ul>
+                        <li>المشاريع (Projects) - إدارة المشاريع</li>
+                        <li>المهام (Tasks) - تتبع المهام</li>
+                        <li>الجداول الزمنية - تخطيط الوقت</li>
+                        <li>الفرق - إدارة فرق العمل</li>
+                        <li>التقارير - تقارير التقدم</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="info-box">
+                        <h4>المشاريع</h4>
+                        <p>تخطيط وتنفيذ المشاريع</p>
+                        <span class="badge">API: /api/projects/projects/</span>
+                    </div>
+                    <div class="info-box">
+                        <h4>المهام</h4>
+                        <p>To Do | In Progress | Done</p>
+                        <span class="badge">API: /api/projects/tasks/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marketing Section -->
+            <div id="marketing" class="module-section">
+                <div class="module-header">
+                    <h2>📢 التسويق (Marketing)</h2>
+                    <p>حملات تسويقية فعالة ومتابعة العملاء المحتملين</p>
+                </div>
+
+                <div class="feature-list">
+                    <h3>المميزات:</h3>
+                    <ul>
+                        <li>الحملات (Campaigns) - حملات تسويقية</li>
+                        <li>العملاء المحتملين (Leads) - إدارة الفرص</li>
+                        <li>البريد الإلكتروني - حملات بريدية</li>
+                        <li>التحليلات - تحليل الأداء</li>
+                        <li>الاستطلاعات - جمع آراء العملاء</li>
+                    </ul>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="info-box">
+                        <h4>الحملات</h4>
+                        <p>تخطيط وتنفيذ حملات تسويقية</p>
+                        <span class="badge">API: /api/marketing/campaigns/</span>
+                    </div>
+                    <div class="info-box">
+                        <h4>العملاء المحتملين</h4>
+                        <p>تتبع وتحويل الفرص</p>
+                        <span class="badge">API: /api/marketing/leads/</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More Section -->
+            <div id="more" class="module-section">
+                <div class="module-header">
+                    <h2>⚙️ أقسام إضافية</h2>
+                    <p>17 قسم متقدم إضافي</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-icon">🌐</div>
+                        <h3>الموقع الإلكتروني</h3>
+                        <p>إدارة محتوى الموقع والصفحات</p>
+                        <span class="badge">API: /api/website/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">💳</div>
+                        <h3>نقاط البيع (POS)</h3>
+                        <p>نظام نقاط البيع المتكامل</p>
+                        <span class="badge">API: /api/pos/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🏭</div>
+                        <h3>التصنيع</h3>
+                        <p>إدارة عمليات التصنيع والإنتاج</p>
+                        <span class="badge">API: /api/manufacturing/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔧</div>
+                        <h3>الصيانة</h3>
+                        <p>جدولة وتتبع الصيانة</p>
+                        <span class="badge">API: /api/maintenance/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📁</div>
+                        <h3>المستندات</h3>
+                        <p>تخزين ومشاركة الملفات</p>
+                        <span class="badge">API: /api/documents/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔄</div>
+                        <h3>الاشتراكات</h3>
+                        <p>العقود الدورية والفواتير التلقائية</p>
+                        <span class="badge">API: /api/subscriptions/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🚗</div>
+                        <h3>إدارة الأسطول</h3>
+                        <p>إدارة المركبات والصيانة</p>
+                        <span class="badge">API: /api/fleet/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">✅</div>
+                        <h3>الجودة</h3>
+                        <p>مراقبة الجودة والفحوصات</p>
+                        <span class="badge">API: /api/quality/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🎫</div>
+                        <h3>الدعم الفني</h3>
+                        <p>تذاكر الدعم وخدمة العملاء</p>
+                        <span class="badge">API: /api/helpdesk/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🎉</div>
+                        <h3>الأحداث</h3>
+                        <p>تنظيم الفعاليات والتسجيلات</p>
+                        <span class="badge">API: /api/events/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🎓</div>
+                        <h3>التعليم</h3>
+                        <p>الدورات التدريبية والمحتوى</p>
+                        <span class="badge">API: /api/elearning/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">💼</div>
+                        <h3>التوظيف</h3>
+                        <p>الوظائف والمقابلات</p>
+                        <span class="badge">API: /api/recruitment/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">✍️</div>
+                        <h3>التوقيعات الإلكترونية</h3>
+                        <p>توقيع المستندات إلكترونياً</p>
+                        <span class="badge">API: /api/sign/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📧</div>
+                        <h3>التسويق البريدي</h3>
+                        <p>حملات البريد وتتبع الأداء</p>
+                        <span class="badge">API: /api/email/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📋</div>
+                        <h3>الاستطلاعات</h3>
+                        <p>إنشاء استطلاعات وجمع البيانات</p>
+                        <span class="badge">API: /api/surveys/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📅</div>
+                        <h3>المواعيد</h3>
+                        <p>جدولة الاجتماعات والمواعيد</p>
+                        <span class="badge">API: /api/appointments/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">💵</div>
+                        <h3>النفقات</h3>
+                        <p>تسجيل المصروفات والموافقات</p>
+                        <span class="badge">API: /api/expenses/</span>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">💬</div>
+                        <h3>المراسلات</h3>
+                        <p>دردشة داخلية بين الموظفين</p>
+                        <span class="badge">API: /api/discuss/</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 BGH ERP System | نظام حسابات متكامل | جميع الحقوق محفوظة</p>
+            <p style="margin-top: 10px;">
+                <a href="https://github.com/BGHUSSEINSASH/bghusseinsashodoo" target="_blank" style="color: #667eea; text-decoration: none;">GitHub</a> | 
+                <a href="https://bghusseinsash07.web.app" target="_blank" style="color: #667eea; text-decoration: none;">Firebase</a>
+            </p>
+        </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        function showModule(moduleId) {
+            const sections = document.querySelectorAll('.module-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(moduleId).classList.add('active');
+            event.target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      });
+
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
     </script>
-  </body>
+</body>
 </html>
