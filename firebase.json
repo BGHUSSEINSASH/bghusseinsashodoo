@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "staticfiles",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -9,12 +9,8 @@
     "rewrites": [
       {
         "source": "**",
-        "function": "api"
+        "destination": "/index.html"
       }
     ]
-  },
-  "functions": {
-    "source": ".",
-    "runtime": "python311"
   }
 }
