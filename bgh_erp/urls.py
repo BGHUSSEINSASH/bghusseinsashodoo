@@ -16,9 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from website.views import homepage
+from xmlrpc_server import xmlrpc_endpoint
+from api_views import api_documentation, api_health_check, system_info
 
 urlpatterns = [
+    path('', homepage, name='homepage'),
     path('admin/', admin.site.urls),
+    path('xmlrpc/2/', xmlrpc_endpoint, name='xmlrpc'),
+    path('api/docs/', api_documentation, name='api_docs'),
+    path('api/health/', api_health_check, name='api_health'),
+    path('api/info/', system_info, name='system_info'),
     path('api/core/', include('core.urls')),
     path('api/accounting/', include('accounting.urls')),
     path('api/sales/', include('sales.urls')),

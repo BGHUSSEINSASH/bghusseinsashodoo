@@ -1,0 +1,357 @@
+<!-- QWeb Templates for BGH ERP System -->
+<!-- نظام القوالب QWeb لإدارة المكونات -->
+
+<templates id="bgh_erp_templates" xml:space="preserve">
+
+    <!-- Core Module Templates -->
+    <t t-name="core.customer_list">
+        <div class="component customer-list">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-people-fill"></i> إدارة العملاء
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <button class="btn btn-success" t-on-click="createCustomer">
+                            <i class="bi bi-plus-circle"></i> إضافة عميل جديد
+                        </button>
+                        <input type="search" class="form-control w-50" placeholder="بحث عن عميل..." t-on-input="searchCustomers"/>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>الاسم</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>الهاتف</th>
+                                    <th>العنوان</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="customers" t-as="customer">
+                                    <tr>
+                                        <td t-esc="customer.id"/>
+                                        <td t-esc="customer.name"/>
+                                        <td t-esc="customer.email"/>
+                                        <td t-esc="customer.phone"/>
+                                        <td t-esc="customer.address"/>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" t-on-click="editCustomer" t-att-data-id="customer.id">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" t-on-click="deleteCustomer" t-att-data-id="customer.id">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Accounting Module Templates -->
+    <t t-name="accounting.invoice_list">
+        <div class="component invoice-list">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-receipt"></i> إدارة الفواتير
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <button class="btn btn-success" t-on-click="createInvoice">
+                                <i class="bi bi-plus-circle"></i> فاتورة جديدة
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select" t-on-change="filterByStatus">
+                                <option value="">جميع الحالات</option>
+                                <option value="draft">مسودة</option>
+                                <option value="posted">منشورة</option>
+                                <option value="paid">مدفوعة</option>
+                                <option value="cancelled">ملغاة</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-success">
+                                <tr>
+                                    <th>رقم الفاتورة</th>
+                                    <th>العميل</th>
+                                    <th>التاريخ</th>
+                                    <th>المبلغ</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="invoices" t-as="invoice">
+                                    <tr>
+                                        <td t-esc="invoice.id"/>
+                                        <td t-esc="invoice.customer_name"/>
+                                        <td t-esc="invoice.date"/>
+                                        <td><span class="badge bg-info" t-esc="invoice.total"/></td>
+                                        <td>
+                                            <span t-attf-class="badge bg-#{invoice.status_color}" t-esc="invoice.status_label"/>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info" t-on-click="viewInvoice" t-att-data-id="invoice.id">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-primary" t-on-click="editInvoice" t-att-data-id="invoice.id">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Sales Module Templates -->
+    <t t-name="sales.order_kanban">
+        <div class="component sales-kanban">
+            <h3 class="mb-4"><i class="bi bi-cart-fill"></i> لوحة المبيعات</h3>
+            <div class="row">
+                <t t-foreach="['draft', 'confirmed', 'delivered', 'invoiced']" t-as="stage">
+                    <div class="col-md-3">
+                        <div class="card mb-3">
+                            <div class="card-header" t-attf-class="bg-#{stage_color[stage]}">
+                                <h5 t-esc="stage_label[stage]"/>
+                                <span class="badge bg-light text-dark" t-esc="order_count[stage]"/>
+                            </div>
+                            <div class="card-body p-2" style="min-height: 400px;">
+                                <t t-foreach="orders[stage]" t-as="order">
+                                    <div class="card mb-2 draggable" draggable="true" t-att-data-id="order.id">
+                                        <div class="card-body p-2">
+                                            <h6 class="card-title" t-esc="order.customer_name"/>
+                                            <p class="card-text small mb-1">
+                                                <strong>المبلغ:</strong> <span t-esc="order.total"/>
+                                            </p>
+                                            <p class="card-text small text-muted" t-esc="order.date"/>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+
+    <!-- Inventory Module Templates -->
+    <t t-name="inventory.stock_dashboard">
+        <div class="component inventory-dashboard">
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">إجمالي المنتجات</h5>
+                            <h2 t-esc="stats.total_products"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <h5 class="card-title">المنتجات المتوفرة</h5>
+                            <h2 t-esc="stats.in_stock"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">مخزون منخفض</h5>
+                            <h2 t-esc="stats.low_stock"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-white bg-danger">
+                        <div class="card-body">
+                            <h5 class="card-title">نفذ من المخزون</h5>
+                            <h2 t-esc="stats.out_of_stock"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="bi bi-box-seam"></i> حركات المخزون الأخيرة</h4>
+                </div>
+                <div class="card-body">
+                    <t t-foreach="recent_moves" t-as="move">
+                        <div class="d-flex justify-content-between align-items-center mb-2 p-2 border-bottom">
+                            <div>
+                                <strong t-esc="move.product_name"/>
+                                <span class="text-muted small" t-esc="move.warehouse_name"/>
+                            </div>
+                            <div>
+                                <span t-attf-class="badge bg-#{move.type_color}">
+                                    <t t-if="move.type == 'in'">➕</t>
+                                    <t t-elif="move.type == 'out'">➖</t>
+                                    <t t-else>🔄</t>
+                                    <t t-esc="move.quantity"/>
+                                </span>
+                                <small class="text-muted ms-2" t-esc="move.date"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- HR Module Templates -->
+    <t t-name="hr.attendance_calendar">
+        <div class="component hr-attendance">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h4><i class="bi bi-calendar-check"></i> الحضور والانصراف</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <h5 class="text-success">حاضر</h5>
+                                    <h2 t-esc="attendance.present"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-danger">
+                                <div class="card-body text-center">
+                                    <h5 class="text-danger">غائب</h5>
+                                    <h2 t-esc="attendance.absent"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-warning">
+                                <div class="card-body text-center">
+                                    <h5 class="text-warning">متأخر</h5>
+                                    <h2 t-esc="attendance.late"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>الموظف</th>
+                                <th>الوظيفة</th>
+                                <th>وقت الحضور</th>
+                                <th>وقت الانصراف</th>
+                                <th>الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="attendance.records" t-as="record">
+                                <tr>
+                                    <td t-esc="record.employee_name"/>
+                                    <td t-esc="record.position"/>
+                                    <td t-esc="record.check_in"/>
+                                    <td t-esc="record.check_out"/>
+                                    <td>
+                                        <span t-attf-class="badge bg-#{record.status_color}" t-esc="record.status"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Project Management Templates -->
+    <t t-name="projects.task_board">
+        <div class="component project-tasks">
+            <div class="d-flex justify-content-between mb-3">
+                <h3><i class="bi bi-list-task"></i> لوحة المهام</h3>
+                <button class="btn btn-primary" t-on-click="createTask">
+                    <i class="bi bi-plus"></i> مهمة جديدة
+                </button>
+            </div>
+            <div class="row">
+                <t t-foreach="['todo', 'in_progress', 'done']" t-as="status">
+                    <div class="col-md-4">
+                        <div class="card mb-3">
+                            <div class="card-header" t-attf-class="bg-#{status_colors[status]} text-white">
+                                <h5 t-esc="status_labels[status]"/>
+                            </div>
+                            <div class="card-body">
+                                <t t-foreach="tasks[status]" t-as="task">
+                                    <div class="card mb-2 shadow-sm">
+                                        <div class="card-body">
+                                            <h6 t-esc="task.title"/>
+                                            <p class="small text-muted" t-esc="task.description"/>
+                                            <div class="d-flex justify-content-between">
+                                                <span class="badge bg-secondary" t-esc="task.project_name"/>
+                                                <span class="text-muted small" t-esc="task.deadline"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+
+    <!-- Generic Form Template -->
+    <t t-name="common.form">
+        <form class="needs-validation" novalidate="true" t-on-submit="handleSubmit">
+            <t t-foreach="fields" t-as="field">
+                <div class="mb-3">
+                    <label t-att-for="field.name" class="form-label" t-esc="field.label"/>
+                    <t t-if="field.type == 'text'">
+                        <input type="text" class="form-control" t-att-name="field.name" t-att-required="field.required"/>
+                    </t>
+                    <t t-elif="field.type == 'email'">
+                        <input type="email" class="form-control" t-att-name="field.name" t-att-required="field.required"/>
+                    </t>
+                    <t t-elif="field.type == 'number'">
+                        <input type="number" class="form-control" t-att-name="field.name" t-att-required="field.required"/>
+                    </t>
+                    <t t-elif="field.type == 'select'">
+                        <select class="form-select" t-att-name="field.name" t-att-required="field.required">
+                            <option value="">اختر...</option>
+                            <t t-foreach="field.options" t-as="option">
+                                <option t-att-value="option.value" t-esc="option.label"/>
+                            </t>
+                        </select>
+                    </t>
+                    <t t-elif="field.type == 'textarea'">
+                        <textarea class="form-control" t-att-name="field.name" rows="3" t-att-required="field.required"/>
+                    </t>
+                </div>
+            </t>
+            <div class="d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="submit" class="btn btn-primary">حفظ</button>
+            </div>
+        </form>
+    </t>
+
+</templates>

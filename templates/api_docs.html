@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}API Documentation - BGH ERP{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-4 mb-4">
+                <i class="bi bi-code-square"></i> توثيق API
+            </h1>
+            <p class="lead">دليل شامل لاستخدام REST API و XML-RPC الخاص بنظام BGH ERP</p>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-5">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body text-center">
+                    <h3>{{ total_endpoints }}</h3>
+                    <p class="mb-0">REST Endpoints</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body text-center">
+                    <h3>26</h3>
+                    <p class="mb-0">وحدات</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body text-center">
+                    <h3>2</h3>
+                    <p class="mb-0">بروتوكولات</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body text-center">
+                    <h3>JSON</h3>
+                    <p class="mb-0">تنسيق البيانات</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs mb-4" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#rest-api">
+                REST API
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#xmlrpc">
+                XML-RPC
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#authentication">
+                المصادقة
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#examples">
+                أمثلة
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+        <!-- REST API Tab -->
+        <div class="tab-pane fade show active" id="rest-api">
+            <h2 class="mb-4">REST API Endpoints</h2>
+            
+            {% for module_key, module in api_endpoints.items %}
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">{{ module.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">Method</th>
+                                    <th>Endpoint</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for endpoint in module.endpoints %}
+                                <tr>
+                                    <td>
+                                        <span class="badge 
+                                            {% if endpoint.method == 'GET' %}bg-primary
+                                            {% elif endpoint.method == 'POST' %}bg-success
+                                            {% elif endpoint.method == 'PUT' %}bg-warning
+                                            {% elif endpoint.method == 'DELETE' %}bg-danger
+                                            {% endif %}">
+                                            {{ endpoint.method }}
+                                        </span>
+                                    </td>
+                                    <td><code>{{ endpoint.url }}</code></td>
+                                    <td>{{ endpoint.description }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- XML-RPC Tab -->
+        <div class="tab-pane fade" id="xmlrpc">
+            <h2 class="mb-4">XML-RPC API</h2>
+            
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                <strong>نقطة النهاية:</strong> <code>{{ xmlrpc_info.endpoint }}</code>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">الدوال المتاحة</h4>
+                </div>
+                <div class="card-body">
+                    {% for method in xmlrpc_info.methods %}
+                    <div class="mb-4">
+                        <h5><code>{{ method.name }}</code></h5>
+                        <p>{{ method.description }}</p>
+                        <p class="mb-1"><strong>المعاملات:</strong></p>
+                        <ul>
+                            {% for param in method.params %}
+                            <li><code>{{ param }}</code></li>
+                            {% endfor %}
+                        </ul>
+                        <p><strong>القيمة المرجعة:</strong> <code>{{ method.returns }}</code></p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">مثال Python</h4>
+                </div>
+                <div class="card-body">
+                    <pre class="bg-dark text-light p-3 rounded"><code>{{ xmlrpc_info.example }}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Authentication Tab -->
+        <div class="tab-pane fade" id="authentication">
+            <h2 class="mb-4">المصادقة (Authentication)</h2>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Token Authentication</h4>
+                </div>
+                <div class="card-body">
+                    <p>للحصول على token:</p>
+                    <pre class="bg-dark text-light p-3 rounded"><code>POST /api/auth/token/
+{
+    "username": "your_username",
+    "password": "your_password"
+}</code></pre>
+                    
+                    <p class="mt-3">استخدام Token في الطلبات:</p>
+                    <pre class="bg-dark text-light p-3 rounded"><code>Authorization: Token your_token_here</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Session Authentication</h4>
+                </div>
+                <div class="card-body">
+                    <p>يمكنك استخدام session authentication من خلال تسجيل الدخول في:</p>
+                    <p><code>/admin/</code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Examples Tab -->
+        <div class="tab-pane fade" id="examples">
+            <h2 class="mb-4">أمثلة الاستخدام</h2>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">JavaScript / Fetch API</h4>
+                </div>
+                <div class="card-body">
+                    <pre class="bg-dark text-light p-3 rounded"><code>// Get customers
+const response = await fetch('/api/core/customers/');
+const customers = await response.json();
+
+// Create new customer
+const newCustomer = await fetch('/api/core/customers/', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        name: 'أحمد محمد',
+        email: 'ahmed@example.com',
+        phone: '+966501234567'
+    })
+});
+
+// Update customer
+await fetch('/api/core/customers/1/', {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        phone: '+966509876543'
+    })
+});
+
+// Delete customer
+await fetch('/api/core/customers/1/', {
+    method: 'DELETE'
+});</code></pre>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">Python / Requests</h4>
+                </div>
+                <div class="card-body">
+                    <pre class="bg-dark text-light p-3 rounded"><code>import requests
+
+base_url = 'http://localhost:8000/api'
+
+# Get customers
+response = requests.get(f'{base_url}/core/customers/')
+customers = response.json()
+
+# Create customer
+new_customer = {
+    'name': 'أحمد محمد',
+    'email': 'ahmed@example.com',
+    'phone': '+966501234567'
+}
+response = requests.post(
+    f'{base_url}/core/customers/',
+    json=new_customer
+)
+
+# Update customer
+requests.put(
+    f'{base_url}/core/customers/1/',
+    json={'phone': '+966509876543'}
+)
+
+# Delete customer
+requests.delete(f'{base_url}/core/customers/1/')</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h4 class="mb-0">cURL</h4>
+                </div>
+                <div class="card-body">
+                    <pre class="bg-dark text-light p-3 rounded"><code># Get customers
+curl http://localhost:8000/api/core/customers/
+
+# Create customer
+curl -X POST http://localhost:8000/api/core/customers/ \
+  -H "Content-Type: application/json" \
+  -d '{"name":"أحمد محمد","email":"ahmed@example.com"}'
+
+# Update customer
+curl -X PUT http://localhost:8000/api/core/customers/1/ \
+  -H "Content-Type: application/json" \
+  -d '{"phone":"+966509876543"}'
+
+# Delete customer
+curl -X DELETE http://localhost:8000/api/core/customers/1/</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <a href="/" class="btn btn-primary me-2">
+                <i class="bi bi-house"></i> الصفحة الرئيسية
+            </a>
+            <a href="/admin/" class="btn btn-success me-2">
+                <i class="bi bi-gear"></i> لوحة الإدارة
+            </a>
+            <a href="/api/health/" class="btn btn-info">
+                <i class="bi bi-heart-pulse"></i> System Health
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

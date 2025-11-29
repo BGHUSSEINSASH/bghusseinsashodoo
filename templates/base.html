@@ -8,12 +8,17 @@
     <meta name="author" content="BGH Systems">
     <title>{% block title %}BGH ERP - نظام حسابات متكامل{% endblock %}</title>
     
+    <!-- Bootstrap 5 RTL -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    
     <!-- CSS -->
-    <link rel="stylesheet" href="/static/css/style.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_css %}{% endblock %}
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/static/img/favicon.png">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
 </head>
 <body>
     <!-- Header -->
@@ -140,14 +145,18 @@
         </p>
     </footer>
 
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
     <!-- JavaScript -->
-    <script src="/static/js/app.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
     {% block extra_js %}{% endblock %}
 
     <script>
         // Helper functions
         function showNotifications() {
-            alert('🔔 لا توجد إشعارات جديدة');
+            const toast = new bootstrap.Toast(document.getElementById('notificationToast'));
+            toast.show();
         }
 
         function showUserMenu() {
@@ -159,7 +168,9 @@
 
         function createNew(type) {
             erpSystem.showNotification(`جاري فتح نموذج إضافة ${type} جديد...`, 'info');
-            // Implement create form logic
+            // Open modal for creating new record
+            const modal = new bootstrap.Modal(document.getElementById('createModal'));
+            modal.show();
         }
 
         function generateReport() {
@@ -175,5 +186,49 @@
             }
         }
     </script>
+    
+    <!-- Toast Notification -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="notificationToast" class="toast" role="alert">
+            <div class="toast-header">
+                <i class="bi bi-bell-fill text-primary me-2"></i>
+                <strong class="me-auto">إشعار</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                لا توجد إشعارات جديدة
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">إضافة سجل جديد</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalContent">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load QWeb Templates -->
+    <script>
+        // Load QWeb templates
+        fetch("{% static 'templates/qweb_templates.xml' %}")
+            .then(response => response.text())
+            .then(xml => {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xml, "text/xml");
+                window.qwebTemplates = xmlDoc;
+            });
+    </script>
+
+    <!-- Components Framework -->
+    <script src="{% static 'js/components.js' %}"></script>
 </body>
 </html>
